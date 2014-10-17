@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Web Console</title>
+    <link rel="stylesheet" type="text/css" href="css/jquery.terminal.css">
+    <script src="js/jquery-1.7.1.min.js"></script>
+    <script src="js/jquery.terminal-0.8.8.js"></script>
+</head>
+<body>
+
+<div id="term_demo"></div>
+
+<script>
+
+    function ab2str(buf) {
+        return String.fromCharCode.apply(null, new Uint8Array(buf));
+    }
+
+    var locationInfo = window.location.href.split("/");
+    var ws = new WebSocket("ws://" + locationInfo[2]);
+    ws.binaryType = "arraybuffer";
+
+    $('#term_demo').terminal(function (command, term) {
+        ws.onmessage = function (msg) {
+            term.resume();
+            term.echo(ab2str(msg.data));
+        };
+        term.pause();
+        ws.send(command + "\n");
+
+    }, {
+        greetings: '',
+        name: 'terminal_ws_demo',
+        height: 500,
+        prompt: 'bash> '});
+
+</script>
+
+</body>
+</html>
