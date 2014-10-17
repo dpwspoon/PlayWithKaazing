@@ -1,2 +1,2 @@
-WebTerminal
+PlayWithKaazing
 ===========
